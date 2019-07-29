@@ -17,4 +17,5 @@ with box overlays for the detected objects.
 
 # Current Progress
 Ran the image classification and object detection demos with the given information
-<br> currently trying to learn how to retrain new models with its customized labels (TPU does NOT handle training according to the site)
+<br> currently trying to learn how to retrain new models with its customized labels (TPU does NOT handle training according to the site; rather it handles compiling .pb file to a .tflite file)
+<br> Currently using https://coral.withgoogle.com/docs/edgetpu/retrain-classification/ for help on retraining. First step is to download "Docker".
