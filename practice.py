@@ -13,7 +13,7 @@ print(len(filenames))
 filenames.sort()
 print(filenames)
 
-for x in range(10):
+for x in range(101):
   print(filenames[x])
 #print(filenames)
 #print(files)
