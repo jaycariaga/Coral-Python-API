@@ -16,12 +16,12 @@ Accesses classification engine to return a label and score of a classification o
 Accesses Detection engine to return a list of labels found using a certain model, and a copy of the picture 
 with box overlays for the detected objects.
 
-# Exercises (testing.py)
-Trying to 
+# testing.py
+Meant to use object detection on multiple image files in a directory and returning object detection outputs and an image with box overlay. 
 
 
 
-# Current Progress
+# Progress on retraining
 Ran the image classification and object detection demos with the given information
 <br> currently trying to learn how to retrain new models with its customized labels (TPU does NOT handle training according to the site; rather it handles compiling .pb file to a .tflite file)
 <br> Currently using https://coral.withgoogle.com/docs/edgetpu/retrain-classification/ for help on retraining. First step is to download "Docker" (done). Now attempting to develop a model that utilizes recognizing flowers.
