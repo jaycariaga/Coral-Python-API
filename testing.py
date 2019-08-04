@@ -14,6 +14,7 @@ from edgetpu.classification.engine import ClassificationEngine
 from PIL import Image
 from PIL import ImageDraw
 import json
+import collections
 
 
 output_dict = {} #declares json
@@ -135,7 +136,15 @@ def main():
       #  print ('Please check ', output_name)
     else:
       print ('No object detected!')
-  print(output_dict)
+  #below handles the JSON print outputs
+  #line below prints out the JSON NOT IN ORDER 
+  #print(output_dict)
+  #below prints it in order inside a JSON but is now a collections object
+  orderoutput = collections.OrderedDict(sorted(output_dict.items()))
+  print(orderoutput)
+  #this one prints in order, however within separate JSON's
+  #for x in sorted(output_dict):
+  #  print(output_dict[str(x)])
 
 if __name__ == '__main__':
   main()
