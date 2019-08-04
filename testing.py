@@ -3,8 +3,8 @@
 #
 #
 #
-
-
+import timeit
+import glob
 import argparse
 import platform
 import subprocess
@@ -30,94 +30,117 @@ def ReadLabelFile(file_path):
 
 
 def main():
+
   parser = argparse.ArgumentParser()
-  #parser.add_argument(
-  #    '--model', help='Path of the detection model.')
-  #parser.add_argument(
-  #    '--label', help='Path of the labels file.')
   parser.add_argument(
-      '--input', help='File path of the input image.', required=True)
+      '--model', help='Path of the detection model.')
+  parser.add_argument( '--inputdir', help = "location of the input directory", required = True)
+  parser.add_argument( '--outputdir', help = "location of the output directory", required = True)
+  parser.add_argument(
+      '--label', help='Path of the labels file.')
+  parser.add_argument(
+      '--input', help='File path of the input image.', )
   parser.add_argument(
       '--output', help='File path of the output image.')
   
   parser.add_argument('--threshold', help='Detection threshold', type=float, required=True)
   args = parser.parse_args()
 
+  filenames = glob.glob(args.inputdir + '*.jpg')
+  #print (filenames) to check for successful image response
+  filenames.sort() #array of images created in order
+
   #model and label are created in script below:
-  newmodel = '/home/igolgi/Downloads/edgetpu_files/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
-  uselabel = '/home/igolgi/Downloads/edgetpu_files/coco_labels.txt'
+  #newmodel = '/home/igolgi/Downloads/edgetpu_files/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
+  #uselabel = '/home/igolgi/Downloads/edgetpu_files/coco_labels.txt'
   
-  if not args.output:
-    output_name = 'object_detection_result.jpg'
+  if not args.outputdir:
+    outputdir = '/home/Downloads/testingoutput'
   else:
-    output_name = args.output
+    outputdir = args.outputdir
 
   # Initialize engine.
-  engine = DetectionEngine(newmodel)
-  labels = ReadLabelFile(uselabel) if uselabel else None
+  engine = DetectionEngine(args.model)
+  labels = ReadLabelFile(args.label) if args.label else None
 
   # Open image.
-  output_dict["input"] = args.input
-  output_dict["results"] = {}
+#?start for loop through directory of images here...?
+#
+#
+#
+  output_dict = {}
+  for x in range(10):
+    output_dict[str(x)] = {}
+    output_dict[str(x)]["results"] = {}	
+    output_dict[str(x)]["input"] = filenames[x]
+    img = Image.open(filenames[x])
 
-  img = Image.open(args.input)
-  draw = ImageDraw.Draw(img)
+  #output_dict["input"] = args.input
 
-  # Run inference.
-  ans = engine.DetectWithImage(img, threshold=args.threshold, keep_aspect_ratio=True,
-                               relative_coord=False, top_k=100)
+  #img = Image.open(args.input)
+    draw = ImageDraw.Draw(img)
 
-  output_dict["results"]["confidence"] = []
-  output_dict["results"]["labels"] = [] 
-  output_dict["results"]["left"] = [] 
-  output_dict["results"]["bottom"] = [] 
-  output_dict["results"]["top"] = [] 
-  output_dict["results"]["right"] = [] 
-  output_dict["results"]["num_contour_points"] = 4 
+  # Run inference. (needs timer here)
+    ans = engine.DetectWithImage(img, threshold=args.threshold, keep_aspect_ratio=True, relative_coord=False, top_k=100)
+    
 
-  totallabels = 0
+    output_dict[str(x)]["results"]["confidence"] = []
+    output_dict[str(x)]["results"]["labels"] = [] 
+    output_dict[str(x)]["results"]["left"] = [] 
+    output_dict[str(x)]["results"]["bottom"] = [] 
+    output_dict[str(x)]["results"]["top"] = [] 
+    output_dict[str(x)]["results"]["right"] = [] 
+    output_dict[str(x)]["results"]["num_contour_points"] = 4 
+
+    totallabels = 0
 
   # Display result.
-  if ans:
-    for obj in ans:
-      print ('-----------------------------------------')
-      if labels:
-        print(labels[obj.label_id])
-      print ('score = ', obj.score)
+    if ans:
+      for obj in ans:
+        print ('-----------------------------------------')
+        print ('\nIteration ' + str(x+1))
+        if labels:
+          print(labels[obj.label_id])
+        print ('score = ', obj.score)
 
-      output_dict["results"]["labels"].append(labels[obj.label_id])
-      output_dict["results"]["confidence"].append(float(obj.score)*100)
+        output_dict[str(x)]["results"]["labels"].append(labels[obj.label_id])
+        output_dict[str(x)]["results"]["confidence"].append(float(obj.score)*100)
       
-      totallabels += 1
+        totallabels += 1
 
-      box = obj.bounding_box.flatten().tolist()
+        box = obj.bounding_box.flatten().tolist()
 
-      output_dict["results"]["left"].append(box[0])
-      output_dict["results"]["top"].append(box[1])
-      output_dict["results"]["right"].append(box[2])
-      output_dict["results"]["bottom"].append(box[3])
+        output_dict[str(x)]["results"]["left"].append(box[0])
+        output_dict[str(x)]["results"]["top"].append(box[1])
+        output_dict[str(x)]["results"]["right"].append(box[2])
+        output_dict[str(x)]["results"]["bottom"].append(box[3])
 
-      print ('box = ', box)
+        print ('box = ', box)
+
       # Draw a rectangle.
-      draw.rectangle(box, outline='red')
-    img.save(output_name)
-    
-    output_dict["results"]["num_labels_detected"] = str(totallabels)
-    print(output_dict)
+        draw.rectangle(box, outline='red')
+      #saves into output folder
+        img.save(outputdir+ '/test_' + str(x) + '.jpg')    
+        output_dict[str(x)]["results"]["num_labels_detected"] = str(totallabels)
 
-    if platform.machine() == 'x86_64':
+      #print(output_dict)
+
+      #if platform.machine() == 'x86_64':
       # For gLinux, simply show the image.
-      img.show()
-    elif platform.machine() == 'armv7l':
+      #  img.show()
+      #elif platform.machine() == 'armv7l':
       # For Raspberry Pi, you need to install 'feh' to display image.
-      subprocess.Popen(['feh', output_name])
+      #  subprocess.Popen(['feh', output_name])
+      #else:
+      #  print ('Please check ', output_name)
     else:
-      print ('Please check ', output_name)
-  else:
-    print ('No object detected!')
+      print ('No object detected!')
+  print(output_dict)
 
 if __name__ == '__main__':
   main()
+
+
 
 
 
