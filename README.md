@@ -25,7 +25,7 @@ go to testing.py directory:<br>
 
 
 
-# Progress on retraining
+# Information on Retraining new models
 Ran the image classification and object detection demos with the given information
 <br> currently trying to learn how to retrain new models with its customized labels (TPU does NOT handle training according to the site; rather it handles compiling .pb file to a .tflite file)
 <br> Currently using https://coral.withgoogle.com/docs/edgetpu/retrain-classification/ for help on retraining. First step is to download "Docker" (done). Now attempting to develop a model that utilizes recognizing flowers.
