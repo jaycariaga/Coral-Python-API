@@ -4,6 +4,7 @@
 #
 #
 import timeit
+import time
 import glob
 import argparse
 import platform
@@ -28,6 +29,9 @@ def ReadLabelFile(file_path):
     pair = line.strip().split(maxsplit=1)
     ret[int(pair[0])] = pair[1].strip()
   return ret
+
+def getanswer(engine, img, argsthreshold):
+  return engine.DetectWithImage(img, threshold=argsthreshold, keep_aspect_ratio=True, relative_coord=False, top_k=100)
 
 
 def main():
@@ -82,7 +86,12 @@ def main():
     draw = ImageDraw.Draw(img)
 
   # Run inference. (needs timer here)
-    ans = engine.DetectWithImage(img, threshold=args.threshold, keep_aspect_ratio=True, relative_coord=False, top_k=100)
+    #ans = engine.DetectWithImage(img, threshold=args.threshold, keep_aspect_ratio=True, relative_coord=False, top_k=100)
+    #time = timeit.timeit(lambda: getanswer(engine, img, args.threshold)) #'from main() import engine, img, args.threshold')
+    print ('-----------------------------------------')
+    times = time.time()
+    ans = getanswer(engine, img, args.threshold)
+    print ("Inference: ---- %s seconds ----" % (time.time() - times))
     
 
     output_dict[str(x)]["results"]["confidence"] = []
@@ -98,7 +107,7 @@ def main():
   # Display result.
     if ans:
       for obj in ans:
-        print ('-----------------------------------------')
+
         print ('\nIteration ' + str(x+1))
         if labels:
           print(labels[obj.label_id])
@@ -148,7 +157,6 @@ def main():
 
 if __name__ == '__main__':
   main()
-
 
 
 
