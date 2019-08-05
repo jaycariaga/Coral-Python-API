@@ -145,6 +145,8 @@ def main():
       #  print ('Please check ', output_name)
     else:
       print ('No object detected!')
+  print ('-----------------------------------------')
+  print ('JSON output:')
   #below handles the JSON print outputs
   #line below prints out the JSON NOT IN ORDER 
   #print(output_dict)
