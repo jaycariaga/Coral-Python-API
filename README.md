@@ -17,11 +17,16 @@ Accesses Detection engine to return a list of labels found using a certain model
 with box overlays for the detected objects.
 
 # testing.py
-Meant to use object detection on multiple image files in a directory and returning object detection outputs and an image with box overlay. 
+Meant to use object detection on multiple image files in a directory and returning object detection outputs and an image with box overlay. Current state of this file is that it takes an input directory of jpg images, uses the coco database to classify, and returns: <b><br>A copy of the input images with box overlays and a JSON file containing the classifications.</b> 
+<br><br>Quick note: JSON printing IN ORDER requires to import the collections package (already handled inside testing.py)
+# RUNNING testing.py (sample from terminal)
+go to testing.py directory:<br>
+<b>$ python3 testing.py --model /home/igolgi/Downloads/edgetpu_files/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite  --inputdir /home/igolgi/snap/skype/common/Downloads/test_images/ --label ~/Downloads/edgetpu_files/coco_labels.txt  --outputdir ~/Downloads/Jasons-downloads/newimages --threshold 0.2 </b>
 
 
 
-# Progress on retraining
+
+# Information on Retraining new models
 Ran the image classification and object detection demos with the given information
 <br> currently trying to learn how to retrain new models with its customized labels (TPU does NOT handle training according to the site; rather it handles compiling .pb file to a .tflite file)
 <br> Currently using https://coral.withgoogle.com/docs/edgetpu/retrain-classification/ for help on retraining. First step is to download "Docker" (done). Now attempting to develop a model that utilizes recognizing flowers.
