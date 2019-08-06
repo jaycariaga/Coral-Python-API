@@ -151,11 +151,8 @@ def main():
   #line below prints out the JSON NOT IN ORDER 
   #print(output_dict)
   #below prints it in order inside a JSON but is now a collections object
-  orderoutput = collections.OrderedDict(sorted(output_dict.items()))
-  print(orderoutput)
-  #this one prints in order, however within separate JSON's
-  #for x in sorted(output_dict):
-  #  print(output_dict[str(x)])
+  newjson = json.dumps(collections.OrderedDict(sorted(output_dict.items(),key=lambda x: x[1]['input'])))
+  print(newjson)
 
 if __name__ == '__main__':
   main()
