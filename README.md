@@ -23,7 +23,27 @@ Meant to use object detection on multiple image files in a directory and returni
 go to testing.py directory:<br>
 <b>$ python3 testing.py --model /home/igolgi/Downloads/edgetpu_files/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite  --inputdir /home/igolgi/snap/skype/common/Downloads/test_images/ --label ~/Downloads/edgetpu_files/coco_labels.txt  --outputdir ~/Downloads/Jasons-downloads/newimages --threshold 0.2 </b>
 
+# Expected inference output from testing.py (sample)
+-----------------------------------------
+Inference: ---- 0.18507647514343262 seconds ----
 
+Iteration 1
+car
+score =  0.417969
+box =  [298.42809677124023, 25.467658415436745, 350.0341033935547, 51.35906274829591]
+
+Iteration 1
+person
+score =  0.210938
+<p>box =  [216.38036727905273, 20.89538052678108, 275.0260353088379, 79.80286915387425] </p>
+-----------------------------------------
+
+Inference: ---- 0.025499582290649414 seconds ----
+
+Iteration 2
+.
+.
+.
 
 
 # Information on Retraining new models
