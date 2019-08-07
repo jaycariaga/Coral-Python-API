@@ -49,6 +49,8 @@ def main():
       '--output', help='File path of the output image.')
   
   parser.add_argument('--threshold', help='Detection threshold', type=float, required=True)
+  parser.add_argument(
+      '--jsonfile', help='File path of the json file.', required = True)
   args = parser.parse_args()
 
   filenames = glob.glob(args.inputdir + '*.jpg')
@@ -157,9 +159,9 @@ def main():
   output_dict = collections.OrderedDict(sorted(output_dict.items(),key=lambda x: x[1]['input']))
 
 #below writes an output file for the json (located where the outputdir is located...
-  with open(outputdir + '/output.json', 'w') as outfile:
+  with open(args.jsonfile + '/output.json', 'w') as outfile:
       json.dump(output_dict, outfile, indent = 4)
-
+  print('success')
 
 if __name__ == '__main__':
   main()
