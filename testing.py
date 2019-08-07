@@ -42,7 +42,7 @@ def main():
   parser.add_argument( '--inputdir', help = "location of the input directory", required = True)
   parser.add_argument( '--outputdir', help = "location of the output directory", required = True)
   parser.add_argument(
-      '--label', help='Path of the labels file.')
+      '--label', help='Path of the labels file.', required = True)
   parser.add_argument(
       '--input', help='File path of the input image.', )
   parser.add_argument(
