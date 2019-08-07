@@ -74,7 +74,7 @@ def main():
 #
 #
   output_dict = {}
-  for x in range(10):
+  for x in range(len(filenames)):
     output_dict[str(x)] = {}
     output_dict[str(x)]["results"] = {}	
     output_dict[str(x)]["input"] = filenames[x]
@@ -106,14 +106,15 @@ def main():
 
   # Display result.
     if ans:
+      print ('Iteration ' + str(x+1))
       for obj in ans:
-
-        print ('\nIteration ' + str(x+1))
+        
         if labels:
           print(labels[obj.label_id])
         print ('score = ', obj.score)
 
-        output_dict[str(x)]["results"]["labels"].append(labels[obj.label_id])
+        if labels:
+          output_dict[str(x)]["results"]["labels"].append(labels[obj.label_id])
         output_dict[str(x)]["results"]["confidence"].append(float(obj.score)*100)
       
         totallabels += 1
