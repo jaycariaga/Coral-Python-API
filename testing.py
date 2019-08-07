@@ -154,6 +154,12 @@ def main():
   #below prints it in order inside a JSON but is now a collections object
   newjson = json.dumps(collections.OrderedDict(sorted(output_dict.items(),key=lambda x: x[1]['input'])))
   print(newjson)
+  output_dict = collections.OrderedDict(sorted(output_dict.items(),key=lambda x: x[1]['input']))
+
+#below writes an output file for the json (located where the outputdir is located...
+  with open(outputdir + '/output.json', 'w') as outfile:
+      json.dump(output_dict, outfile, indent = 4)
+
 
 if __name__ == '__main__':
   main()
